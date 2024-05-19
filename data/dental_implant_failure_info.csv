@@ -1,0 +1,22 @@
+name,,type,max-range,categories,legend,,,,,,,,,,,,
+Age,y,0,0,,,,,,,,,,,,,,numerik
+Gender,y,1,0,0;1,female;male,,,,,,,,,,,,
+Systemic disease,y,1,0,0;1;2;3;4;5,Healthy;Cardiovascular disorder;Diabetes;Osteoporosis;Radiotherapy;Others,,,,,,,,,,,,
+Factors of missing,y,1,0,0;1;2;3;4;5,Congenital missing;Caries;Periodontitis;Fracture;Root resorption;Failure of endodontic treatment,,,,,,,,,,,,
+Tobacco smoking,y,1,0,0;1;2,Never;Smoking;Stopped,,,,,,,,,,,,
+Betel nut Chewing,X,1,0,0;1;2,Never;Chewing;Stopped,,,,,,,,,,,,
+Alcohol consumption,X,1,0,0;1;2,Never;Drinking;Stopped,,,,,,,,,,,,
+Departments,X,1,0,0;1;2,General practice;Periodontics;Oral-Maxillar surgery,,,,,,,,,,,,
+Surgeon experience,X,0,0,,,,,,,,,,,,,,numerik
+Location of implant,y,1,0,0;1;2;3;4;5,Maxillary anterior teeth;Maxillary premolars;Maxillary molar;Mandibular anterior teeth;Mandibular premolars;Mandibular molars,,,,,,,,,,,,
+Bone density,y,1,0,1;2;3;4,Type I;Type II; Type III;Type IV,,,,,,,,,,,,
+Timing of implant placement,y,1,0,1;2;3,Immediate implant placement;Early implant placement;Staged implant placement,,,,,,,,,,,,
+Ridge augmentation,y,1,0,0;1;2,None;Guided bone regeneration;Ridge splitting,,,,,,,,,,,,
+Maxillary sinus augmentation,y,1,0,0;1;2,None;Lateral window technique;Osteotome technique,,,,,,,,,,,,
+Implant system,y,1,0,0;1;2;3;4;5,Straumann;Ankylos;XIVE;Nobeactive;Branemark;Lifecore,,,,,,,,,,,,
+Fixture length,y,0,0,,,,,,,,,,,,,,numerik
+Fixture width,y,0,0,,,,,,,,,,,,,,numerik
+Types of prosthesis,y,1,0,0;1,Fixed denture;Overdenture,,,,,,,,,,,,
+Angle of abutment,X,1,0,0;1,Without angle;With angle,,,,,,,,,,,,
+Prosthesis fixation,y,1,0,0;1,Cement-retained;Screw-reained,,,,,,,,,,,,
+Dental implant failure,,1,0,0;1,yes;no,,,,,,,,,,,,label

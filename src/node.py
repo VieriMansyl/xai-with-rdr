@@ -66,7 +66,7 @@ class Node:
 	) -> Tuple[bool, list[Dict[str, Any]]]:
 
 		if self.isRoot:
-			return True, None
+			return True, []
 		
 		# comparison function for numeric attributes
 		comparison = {
@@ -96,16 +96,16 @@ class Node:
 					elif input_value != value:
 						isFulfilled = False
 						fulfilled = False
-
 				else:
 					if input_value != value:
 						isFulfilled = False
 						fulfilled = False
 
-				log.append({"key": key, "value": value, "comp": operator, "Fulfilled": fulfilled})
+				log.append({"key": key, "value": value, "comp": operator, "isFulfilled": fulfilled})
 	
 			except KeyError:
-				return False, [{"There is no such condition on input_case": key}]
+				isFulfilled = False
+				continue
 		
 		return isFulfilled, log
 	
