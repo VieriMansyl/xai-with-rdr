@@ -161,7 +161,7 @@ class RDR:
 		return solutions
 
 	
-	def explain_instance(self, case: pd.DataFrame):
+	def explain_instance(self, case):
 
 		def group_by_key(explanations):
 			grouped = {}
@@ -184,7 +184,10 @@ class RDR:
 			result = list(grouped.values())
 			return result, label
 		
-		output, lastTrueNode, _, _, explanations = self._inference_(case.to_dict(orient='records')[0])
+		if isinstance(case, pd.DataFrame):
+			output, lastTrueNode, _, _, explanations = self._inference_(case.to_dict(orient='records')[0])
+		elif isinstance(case, dict):
+			output, lastTrueNode, _, _, explanations = self._inference_(case)
 		reason = {}
 		cornerstone = lastTrueNode.getCornerstone()
 
@@ -254,6 +257,8 @@ class RDR:
 				'comp': comp,
 				'isFulfilled': isFulfilled
 			})
+
+		display(case) # type: ignore
 		
 		self.visualize_explanation(reasons, label)
 		return output, reason, cornerstone
@@ -287,7 +292,7 @@ class RDR:
 						if len(value) == 2:
 							condition = f"{key} is neither {value[0]} nor {value[1]}"
 						else:
-							condition = f"{key} is not {', '.join(map(str, value))}"
+							condition = f"{key} are not {', '.join(map(str, value))}"
 					else:
 						condition = f"{key} is not {value}"
 			else:		# numeric attr
@@ -304,11 +309,17 @@ class RDR:
 					elif comp == '>':
 						condition = f"{value[0]} < {key} < {value[1]}" if value[1] else f"{key} > {value[0]}"
 			
-			table.append([condition, label['label']])
+			table.append([condition])
 		
-		dff = pd.DataFrame(table, columns=['Reasons', 'Label'])
+		dff = pd.DataFrame(table, columns=['Reasons'])
 
-		_, ax = plt.subplots()
+		table_width = dff.shape[1] * 0.5  # Assuming each column takes up 0.5 inches
+		table_height = dff.shape[0] * 0.3  # Assuming each row takes up 0.3 inches
+		text_length = len(str(label['label'])) * 0.1  # Assuming each character takes up 0.1 inches
+		total_width = max(table_width, text_length)  # Choose the maximum width
+		total_height = table_height + 0.5  # Add some padding for the text
+
+		fig, ax = plt.subplots(figsize=(total_width, total_height))
 
 		# Plot the table
 		tab = ax.table(
@@ -321,9 +332,24 @@ class RDR:
 		ax.axis('off')
 		tab.auto_set_column_width(col=list(range(len(dff.columns))))
 
+		# Adjust cell alignment
 		cells = tab.properties()["celld"]
-		for i in range(len(table)):
+		for i in range(len(dff)):
 			cells[i + 1, 0].get_text().set_ha('left')
-			cells[i + 1, 1].get_text().set_ha('center')
+
+		# Get the bounding box of the table
+		table_bbox = tab.get_window_extent(fig.canvas.get_renderer())
+
+		# Convert the bounding box to figure coordinates
+		inv = fig.transFigure.inverted()
+		table_bbox_fig = table_bbox.transformed(inv)
+
+		# Calculate the position for the text
+		text_x = table_bbox_fig.x0  # Use the left edge of the table
+		text_y = table_bbox_fig.y1 + 0.02  # 0.02 is a small offset
+
+		# Add the prediction text right above the table, aligned to the left
+		prediction_text = f"Prediction: {label['label']}"
+		plt.text(text_x, text_y, prediction_text, ha='left', va='bottom', transform=fig.transFigure, fontsize=12, fontweight='bold')
 
 		plt.show()
