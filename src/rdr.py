@@ -99,15 +99,15 @@ class RDR:
 		parentNode: Node,
 		cases: Dict[str, Any],
 		label: Any,
-		cornerstones: Dict[str, Any] = None
+		cornerstones: Dict[str, Any] = None,
 	) -> None:
 		
 		try:
 			precedents = None
 
-			if self._total_precedent == 0:		# use all the cases as the precedent
+			if self._total_precedent == 0:	# use all the cases as the precedent
 				precedents = cases
-			elif self._total_precedent > len(cornerstones): 		# check if the total_precedent is within bounds (i.e. not greater than the total number of available features)
+			elif self._total_precedent > len(cornerstones):  # check if the total_precedent is within bounds (i.e. not greater than the total number of available features)
 				raise PrecedentValueError('Total precedent value is greater than the total number of available features')
 			else:
 				precedent_items = list(cases.items())
@@ -160,7 +160,22 @@ class RDR:
 			solutions = np.append(solutions, output)
 		return solutions
 
-	
+
+	def change_label(
+			self,
+			input_case: pd.DataFrame,
+			new_label: Any
+		) -> None:
+		case = input_case.to_dict(orient='records')[0]
+
+		_, lastTrueNode, isFulfilled, previousNode, _ = self._inference_(case)
+		refinementCases = lastTrueNode._disjoint_(case)
+
+		if not refinementCases:
+			refinementCases = lastTrueNode.getRule().getPrecedent()
+		self._addRefinementNode_(isFulfilled, previousNode, refinementCases, new_label, case)
+
+
 	def explain_instance(self, case):
 
 		def group_by_key(explanations):
@@ -286,12 +301,19 @@ class RDR:
 
 			if not comp:		# categorical attr
 				if isFulfilled:
+					# condition = f"{key} is {mappings[key][value]}" if key in mappings else f"{key} is {value}"
 					condition = f"{key} is {value}"
 				else:
 					if isinstance(value, list):
 						if len(value) == 2:
+							# condition = f"{key} is neither {mappings[key][value[0]]} nor {mappings[key][value[1]]}"\
+							# 			if key in mappings\
+							# 			else f"{key} is neither {value[0]} nor {value[1]}"
 							condition = f"{key} is neither {value[0]} nor {value[1]}"
 						else:
+							# condition = f"{key} are not {', '.join([mappings[key][v] for v in value])}"\
+							# 			if key in mappings\
+							# 			else f"{key} are not {', '.join(value)}"
 							condition = f"{key} are not {', '.join(map(str, value))}"
 					else:
 						condition = f"{key} is not {value}"
