@@ -301,19 +301,12 @@ class RDR:
 
 			if not comp:		# categorical attr
 				if isFulfilled:
-					# condition = f"{key} is {mappings[key][value]}" if key in mappings else f"{key} is {value}"
 					condition = f"{key} is {value}"
 				else:
 					if isinstance(value, list):
 						if len(value) == 2:
-							# condition = f"{key} is neither {mappings[key][value[0]]} nor {mappings[key][value[1]]}"\
-							# 			if key in mappings\
-							# 			else f"{key} is neither {value[0]} nor {value[1]}"
 							condition = f"{key} is neither {value[0]} nor {value[1]}"
 						else:
-							# condition = f"{key} are not {', '.join([mappings[key][v] for v in value])}"\
-							# 			if key in mappings\
-							# 			else f"{key} are not {', '.join(value)}"
 							condition = f"{key} are not {', '.join(map(str, value))}"
 					else:
 						condition = f"{key} is not {value}"
@@ -335,11 +328,11 @@ class RDR:
 		
 		dff = pd.DataFrame(table, columns=['Reasons'])
 
-		table_width = dff.shape[1] * 0.5  # Assuming each column takes up 0.5 inches
-		table_height = dff.shape[0] * 0.3  # Assuming each row takes up 0.3 inches
-		text_length = len(str(label['label'])) * 0.1  # Assuming each character takes up 0.1 inches
-		total_width = max(table_width, text_length)  # Choose the maximum width
-		total_height = table_height + 0.5  # Add some padding for the text
+		table_width = dff.shape[1] * 0.5
+		table_height = dff.shape[0] * 0.3
+		text_length = len(str(label['label'])) * 0.1
+		total_width = max(table_width, text_length)
+		total_height = table_height + 0.5
 
 		fig, ax = plt.subplots(figsize=(total_width, total_height))
 
@@ -367,8 +360,8 @@ class RDR:
 		table_bbox_fig = table_bbox.transformed(inv)
 
 		# Calculate the position for the text
-		text_x = table_bbox_fig.x0  # Use the left edge of the table
-		text_y = table_bbox_fig.y1 + 0.02  # 0.02 is a small offset
+		text_x = table_bbox_fig.x0
+		text_y = table_bbox_fig.y1 + 0.02
 
 		# Add the prediction text right above the table, aligned to the left
 		prediction_text = f"Prediction: {label['label']}"
