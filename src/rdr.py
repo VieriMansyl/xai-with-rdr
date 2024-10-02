@@ -130,6 +130,12 @@ class RDR:
 			raise e
 
 
+	'''
+	X (format: pd.DataFrame) : input data 
+	y (format: pd.DataFrame) : label
+
+	note: X and y must have the same number of samples
+	'''
 	def fit(self, X, y):
 		# validate input
 		n_samples, _ = X.shape
