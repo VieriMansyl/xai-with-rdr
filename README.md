@@ -3,7 +3,7 @@
 **Author**: Vieri Mansyl  
 **Co-Author**: Windy Gambetta  
 
-**Paper**: To Be Announced (TBA)
+**Paper**: https://doi.org/10.1109/ICAICTA63815.2024.10763357
 
 ## Overview
 
